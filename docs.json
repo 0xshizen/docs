@@ -16,17 +16,22 @@
           {
             "group": "Stellium",
             "pages": [
-              "index",
-              "referral-and-points"
+              "index"
             ]
           },
           {
             "group": "Products",
             "pages": [
-              "products/Overview",
-              "products/Dex Routing",
-              "products/Fast Tx Landing",
-              "products/Native Staking"
+              "products/overview",
+              "products/swap-routing",
+              "products/fast-tx-landing",
+              "products/native-staking"
+            ]
+          },
+          {
+            "group": "Guides",
+            "pages": [
+              "referral-and-points"
             ]
           }
         ]

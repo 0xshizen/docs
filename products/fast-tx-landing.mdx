@@ -1,0 +1,79 @@
+---
+title: 'Fast Transaction Landing'
+description: 'Land your tx faster than anyone — measured in shreds.'
+---
+<img
+  src="/images/fast-tx-landing-hero.png"
+  alt="Stellium"
+/>
+## The Challenge: Unreliable Transaction Landing
+
+In the Solana ecosystem, transaction confirmation times can be unpredictable due to:
+- Block congestion during peak periods
+- Lack of transaction prioritization
+- Network latency and validator distribution
+- Varying infrastructure quality
+
+<Note>
+This uncertainty particularly affects power users like traders, bots, and dApps where timing is critical.
+</Note>
+
+## Our Solution: Stake-Enabled, Multi-Path Submission
+
+Stellium uses staked connections and automatically submits transactions to validator leaders through our global low-latency endpoints. We compete at the shred level for optimal performance.
+
+## Pricing Tiers & Rate Limits
+
+| Feature | Trial (first week) | Entry | Intermediate | Advanced |
+|:---:|:---:|:---:|:---:|:---:|
+| Billed per month | $0 | $280 | $700 | $1,400 |
+| Billed annually | $0 | $3,200 | $8,100 | $16,000 |
+| TPS | 5 TPS | 5 TPS | 20 TPS | 50 TPS |
+| SWQoS | Dedicated SWQoS | Dedicated SWQoS | Dedicated SWQoS | Dedicated SWQoS |
+| Transaction Tip | 0.001 SOL | 0.001 SOL | 0.001 SOL | 0.001 SOL |
+
+## API Usage
+
+We use the standard Solana `sendTransaction` format in our API:
+
+```bash
+curl -X POST 'https://STELLIUM_ENDPOINT?api-key=$APIKEY' \
+-d '{
+    "jsonrpc": "2.0",
+    "id": $UUID,
+    "method": "sendTransaction",
+    "params": [ 
+        "<base64_encoded_tx>",
+        { "encoding": "base64" }
+    ] 
+}'
+```
+<CardGroup cols={2}>
+  <Card title="Register Your Interest" icon="pen-to-square" href="/quickstart">
+    Register your interest to use fast tx landing service
+  </Card>
+  <Card title="API Reference" icon="code" href="/api-reference/introduction">
+    Integrate acceleration into your dApp
+  </Card>
+</CardGroup>
+
+## Transaction Tip 
+
+Each transaction must include a system transfer instruction to one of the Stellium tip addresses below, with a minimum tip of 0.001 SOL. To ensure optimal transaction landing, we recommend alternating addresses for each transaction.
+
+Stellium Tip Address:
+
+```bash
+ste11XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1
+ste11XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX2
+ste11XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX3
+```
+
+<Note>
+Beta launch of fast transaction landing is coming soon.
+</Note>
+
+
+
+
+
