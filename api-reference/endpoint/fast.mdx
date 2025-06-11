@@ -1,0 +1,105 @@
+---
+title: 'Fast Landing'
+description: 'Submit transactions to Solana through Stellium fast tx landing service'
+openapi: 'POST /fast'
+---
+
+
+## Authentication
+
+All API calls require an API key passed as a query parameter `api-key`.
+
+## Send Transaction
+
+Submit a transaction to Solana network through Stellium's optimized transaction landing service.
+
+
+### Request Format
+
+We use the standard Solana `sendTransaction` JSON-RPC format:
+
+<CodeGroup>
+```bash Curl
+curl -X POST 'https://STELLIUM_ENDPOINT?api-key=$APIKEY' \
+-d '{
+    "jsonrpc": "2.0",
+    "id": $UUID,
+    "method": "sendTransaction",
+    "params": [ 
+        "<base64_encoded_tx>",
+        { "encoding": "base64" }
+    ] 
+}'
+```
+
+```typescript TypeScript
+const response = await fetch('https://STELLIUM_ENDPOINT?api-key=$APIKEY', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    jsonrpc: '2.0',
+    id: uuid(),
+    method: 'sendTransaction',
+    params: [
+      base64EncodedTx,
+      { encoding: 'base64' }
+    ]
+  })
+});
+```
+
+```python Python
+import requests
+import uuid
+
+response = requests.post(
+    'https://STELLIUM_ENDPOINT',
+    params={'api-key': 'YOUR_API_KEY'},
+    json={
+        'jsonrpc': '2.0',
+        'id': str(uuid.uuid4()),
+        'method': 'sendTransaction',
+        'params': [
+            base64_encoded_tx,
+            {'encoding': 'base64'}
+        ]
+    }
+)
+```
+</CodeGroup>
+
+### Parameters
+
+| Parameter | Type | Description |
+|:---:|:---:|:---|
+| `base64_encoded_tx` | string | The transaction encoded in base64 format |
+| `encoding` | string | Must be 'base64' |
+
+### Response
+
+<CodeGroup>
+```json Success
+{
+    "jsonrpc": "2.0",
+    "result": "transaction_signature",
+    "id": "request_id"
+}
+```
+
+```json Error
+{
+    "jsonrpc": "2.0",
+    "error": {
+        "code": error_code,
+        "message": "Error description"
+    },
+    "id": "request_id"
+}
+```
+</CodeGroup>
+
+### Important Notes
+
+1. Each transaction must include a system transfer instruction to one of the Stellium tip addresses with a minimum tip of 0.001 SOL
+2. Rate limits apply based on your subscription tier
+3. For optimal transaction landing, alternate between different tip addresses for consecutive transactions 

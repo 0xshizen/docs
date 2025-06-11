@@ -1,152 +1,75 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "OpenAPI Plant Store",
-    "description": "A sample API that uses a plant store as an example to demonstrate features in the OpenAPI specification",
-    "license": {
-      "name": "MIT"
-    },
+    "title": "Stellium Fast Transaction Landing API",
+    "description": "API for submitting transactions to Solana through Stellium's optimized transaction landing service",
     "version": "1.0.0"
   },
   "servers": [
     {
-      "url": "http://sandbox.mintlify.com"
+      "url": "https://STELLIUM_ENDPOINT"
     }
   ],
   "security": [
     {
-      "bearerAuth": []
+      "apiKeyQuery": []
     }
   ],
   "paths": {
-    "/plants": {
-      "get": {
-        "description": "Returns all plants from the system that the user has access to",
-        "parameters": [
-          {
-            "name": "limit",
-            "in": "query",
-            "description": "The maximum number of results to return",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Plant response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Plant"
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      },
+    "/fast": {
       "post": {
-        "description": "Creates a new plant in the store",
+        "description": "Submit a transaction to Solana network through Stellium's optimized transaction landing service",
         "requestBody": {
-          "description": "Plant to add to the store",
+          "description": "JSON-RPC request for sendTransaction",
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/NewPlant"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "plant response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Plant"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/plants/{id}": {
-      "delete": {
-        "description": "Deletes a single plant based on the ID supplied",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "ID of plant to delete",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Plant deleted",
-            "content": {}
-          },
-          "400": {
-            "description": "unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  },
-  "webhooks": {
-    "/plant/webhook": {
-      "post": {
-        "description": "Information about a new plant added to the store",
-        "requestBody": {
-          "description": "Plant added to the store",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NewPlant"
+                "$ref": "#/components/schemas/SendTransactionRequest"
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "Return a 200 status to indicate that the data was received successfully"
+            "description": "Transaction submitted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SendTransactionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -154,63 +77,105 @@
   },
   "components": {
     "schemas": {
-      "Plant": {
-        "required": [
-          "name"
-        ],
+      "SendTransactionRequest": {
         "type": "object",
+        "required": ["jsonrpc", "id", "method", "params"],
         "properties": {
-          "name": {
-            "description": "The name of the plant",
-            "type": "string"
+          "jsonrpc": {
+            "type": "string",
+            "description": "JSON-RPC version",
+            "default": "2.0"
           },
-          "tag": {
-            "description": "Tag to specify the type",
-            "type": "string"
+          "id": {
+            "type": "string",
+            "description": "Request identifier"
+          },
+          "method": {
+            "type": "string",
+            "description": "Method name",
+            "default": "sendTransaction"
+          },
+          "params": {
+            "type": "array",
+            "description": "Parameters for sendTransaction",
+            "prefixItems": [
+              {
+                "type": "string",
+                "description": "Base64 encoded transaction",
+                "example": "<base64_encoded_tx>"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "encoding": {
+                    "type": "string",
+                    "description": "Transaction encoding format",
+                    "default": "base64",
+                    "enum": ["base64"]
+                  }
+                },
+                "additionalProperties": false,
+                "default": { "encoding": "base64" }
+              }
+            ],
+            "items": false,
+            "minItems": 2,
+            "maxItems": 2
           }
         }
       },
-      "NewPlant": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Plant"
+      "SendTransactionResponse": {
+        "type": "object",
+        "required": ["jsonrpc", "id", "result"],
+        "properties": {
+          "jsonrpc": {
+            "type": "string",
+            "description": "JSON-RPC version",
+            "default": "2.0"
           },
-          {
-            "required": [
-              "id"
-            ],
+          "id": {
+            "type": "string"
+          },
+          "result": {
+            "type": "string",
+            "description": "Transaction signature"
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "required": ["jsonrpc", "id", "error"],
+        "properties": {
+          "jsonrpc": {
+            "type": "string",
+            "description": "JSON-RPC version",
+            "default": "2.0"
+          },
+          "id": {
+            "type": "string"
+          },
+          "error": {
             "type": "object",
+            "required": ["code", "message"],
             "properties": {
-              "id": {
-                "description": "Identification number of the plant",
+              "code": {
                 "type": "integer",
-                "format": "int64"
+                "description": "Error code"
+              },
+              "message": {
+                "type": "string",
+                "description": "Error message"
               }
             }
-          }
-        ]
-      },
-      "Error": {
-        "required": [
-          "error",
-          "message"
-        ],
-        "type": "object",
-        "properties": {
-          "error": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "message": {
-            "type": "string"
           }
         }
       }
     },
     "securitySchemes": {
-      "bearerAuth": {
-        "type": "http",
-        "scheme": "bearer"
+      "apiKeyQuery": {
+        "type": "apiKey",
+        "in": "query",
+        "name": "api-key"
       }
     }
   }
