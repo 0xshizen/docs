@@ -1,27 +1,27 @@
 ---
-title: 'Fast Transaction Landing'
-description: 'Land your tx faster than anyone — measured in shreds.'
+title: "Fast Transaction Landing"
+description: "Land your tx faster than anyone — measured in shreds."
 ---
-<img
-  src="/images/fast-tx-landing-hero.webp"
-  alt="Stellium"
-/>
+
+<img src="/images/fast-tx-landing-hero.webp" alt="Stellium" />
 ## The Challenge: Unreliable Transaction Landing
 
-In the Solana ecosystem, transaction confirmation times can be unpredictable due to:
-- Block congestion during peak periods
+In the Solana ecosystem, transaction landing rate and finality times can be unsatisfying due to:
+
+- Blockchain congestion during peak periods
 - Lack of transaction prioritization
 - Network latency and validator distribution
 - Varying infrastructure quality
 
 <Note>
-This uncertainty particularly affects power users like traders, bots, and dApps where timing is critical.
+  This uncertainty particularly affects power users like traders, bots, and
+  dApps where execution quality and consistency is critical.
 </Note>
 
 ## Our Solution: Stake-Enabled, Multi-Path Submission
 
-Stellium uses staked connections and automatically submits transactions to validator leaders through our global low-latency endpoints. We compete at the shred level for optimal performance.
-
+Stellium uses staked connections and automatically submits transactions to validator leaders through our low latency networks.
+Stellium optimizes the whole newtorking stack to improve landing rate and tx finality times.
 
 ## API Usage
 
@@ -33,12 +33,13 @@ curl -X POST 'https://STELLIUM_ENDPOINT?api-key=$APIKEY' \
     "jsonrpc": "2.0",
     "id": $UUID,
     "method": "sendTransaction",
-    "params": [ 
+    "params": [
         "<base64_encoded_tx>",
         { "encoding": "base64" }
-    ] 
+    ]
 }'
 ```
+
 <CardGroup cols={2}>
   <Card title="Register Your Interest" icon="pen-to-square" href="/quickstart">
     Register your interest to use fast tx landing service
@@ -48,9 +49,10 @@ curl -X POST 'https://STELLIUM_ENDPOINT?api-key=$APIKEY' \
   </Card>
 </CardGroup>
 
-## Transaction Tip 
+## Transaction Tip
 
-Each transaction must include a system transfer instruction to one of the Stellium tip addresses below, with a minimum tip of 0.001 SOL. To ensure optimal transaction landing, we recommend alternating addresses for each transaction.
+Each transaction must include a system transfer instruction to one of the Stellium tip addresses below, with a minimum tip of 0.001 SOL.
+To ensure optimal transaction landing, we recommend alternating addresses for each transaction.
 
 Stellium Tip Address:
 
@@ -60,11 +62,4 @@ ste11XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX2
 ste11XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX3
 ```
 
-<Note>
-Beta launch of fast transaction landing is coming soon.
-</Note>
-
-
-
-
-
+<Note>Beta launch of fast transaction landing is coming soon.</Note>
