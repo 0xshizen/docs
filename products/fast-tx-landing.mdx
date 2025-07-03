@@ -1,5 +1,5 @@
 ---
-title: "Fast Transaction Landing"
+title: "Fast Landing"
 description: "Land your tx faster than anyone — measured in shreds."
 ---
 
@@ -39,19 +39,11 @@ curl -X POST 'https://STELLIUM_ENDPOINT?api-key=$APIKEY' \
 }'
 ```
 
-<CardGroup cols={2}>
-  <Card title="Register Your Interest" icon="pen-to-square" href="/quickstart">
-    Register your interest to use fast tx landing service
-  </Card>
-  <Card title="API Reference" icon="code" href="/api-reference/introduction">
-    Integrate acceleration into your dApp
-  </Card>
-</CardGroup>
+
 
 ## Transaction Tip
 
-Each transaction must include a system transfer instruction to one of the Stellium tip addresses below, with a minimum tip of 0.001 SOL.
-To ensure optimal transaction landing, we recommend alternating addresses for each transaction.
+Each transaction can optionally include a system transfer instruction to one of the Stellium tip addresses below. While tipping (e.g., 0.001 SOL) improves priority, transactions with 0 tip will still be routed through staked connections—just subject to rate limits.
 
 Stellium Tip Address:
 
@@ -62,3 +54,11 @@ ste11XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX3
 ```
 
 <Note>Beta launch of fast transaction landing is coming soon.</Note>
+<CardGroup cols={2}>
+  <Card title="Join the Waitlist" icon="pen-to-square" href="https://tally.so/r/npNEeJ">
+    Join the waitlist for early access to the fast landing API
+  </Card>
+  <Card title="API Reference" icon="code" href="/api-reference/introduction">
+    Integrate acceleration into your dApp
+  </Card>
+</CardGroup>

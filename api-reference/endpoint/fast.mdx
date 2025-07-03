@@ -97,6 +97,6 @@ response = requests.post(
 
 ### Important Notes
 
-1. Each transaction must include a system transfer instruction to one of the Stellium tip addresses with a minimum tip of 0.001 SOL
+1. Transactions may include a system transfer instruction to one of the Stellium tip addresses. Tipping (e.g., 0.001 SOL) improves priority, but transactions without a tip will still be routed via staked connections (subject to rate limits).
 2. Rate limits apply based on your subscription tier
 3. For optimal transaction landing, alternate between different tip addresses for consecutive transactions 
